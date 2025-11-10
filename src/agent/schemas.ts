@@ -3,7 +3,9 @@ import { z } from "zod";
 // 场景定义
 export const ScenarioSchema = z.object({
   prompt: z.string().describe("The scenario prompt for the user"),
+  promptZh: z.string().describe("Chinese translation of the prompt"),
   context: z.string().describe("Background context for the scenario"),
+  contextZh: z.string().describe("Chinese translation of the context"),
   category: z.enum([
     'daily',
     'business',
@@ -82,7 +84,8 @@ export const EvaluationSchema = z.object({
   transcription: z.string().describe("The transcribed text from the audio"),
   scores: ScoresSchema.describe("Numerical scores for different aspects"),
   feedback: FeedbackSchema.describe("Detailed feedback"),
-  suggestedResponse: z.string().describe("A model response for this scenario"),
+  suggestedResponse: z.string().describe("A model response for this scenario (English)"),
+  suggestedResponseZh: z.string().describe("Chinese translation/explanation of the model response"),
   summary: z.string().describe("Overall encouraging feedback and key takeaways"),
   nextScenario: ScenarioSchema.describe("Next practice scenario")
 });
