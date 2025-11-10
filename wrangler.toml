@@ -1,6 +1,6 @@
 name = "english-speaking-agent"
 main = "src/index.ts"
-compatibility_date = "2024-01-01"
+compatibility_date = "2024-10-01"
 compatibility_flags = ["nodejs_compat"]
 
 # 开发服务器配置

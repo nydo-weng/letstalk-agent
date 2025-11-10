@@ -26,10 +26,13 @@ noagent/
 ├── src/
 │   ├── index.ts              # Worker 入口和 API 路由
 │   ├── agent/
-│   │   ├── evaluation-agent.ts  # 评估 Agent 核心逻辑
+│   │   ├── evaluation-agent.ts  # 复用 Mastra Tool 的评估逻辑
 │   │   ├── schemas.ts           # Zod schemas 和类型定义
-│   │   ├── tools.ts             # Mastra 工具定义
+│   │   ├── tools.ts             # Whisper 转录工具
 │   │   └── prompts.ts           # Prompt 模板
+│   ├── mastra/
+│   │   ├── agents/              # Speaking coach Agent 定义
+│   │   └── tools/               # generate/evaluate 等 Tool 定义
 │   └── utils/
 │       └── openai.ts            # OpenAI 客户端工具
 ├── wrangler.toml             # Cloudflare Worker 配置
@@ -175,6 +178,16 @@ curl -X POST http://localhost:8787/api/evaluate \
   -F "audio=@test-audio.webm" \
   -F 'scenario={"prompt":"Order coffee","context":"At a cafe","category":"dining","difficulty":"beginner"}'
 ```
+
+## 在 Mastra Dashboard 中使用
+
+项目内的 `src/mastra` 目录提供了同一套 Tool 与 Agent：
+
+- `generateScenarioTool` / `evaluateSpeechTool` / `transcribeTool` 符合 Mastra Tool 规范，可直接注册到 Mastra Studio 或自建 Mastra 项目。
+- `speakingCoachAgent` 在 `src/mastra/agents` 中暴露，引用这些工具后即可在 `mastra dev`、Mastra Dashboard 或其它 MCP 客户端中与之交互。
+- Cloudflare Worker 端点也复用这些 Tool，因此前端 API 行为保持不变。
+
+> 提示：在运行 Mastra CLI 或 Dashboard 时，确保设置 `OPENAI_API_KEY` 环境变量，或在调用工具时传入 `apiKey`。
 
 ## 成本估算
 

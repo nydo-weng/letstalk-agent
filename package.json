@@ -10,10 +10,18 @@
     "tail": "wrangler tail",
     "types": "tsc --noEmit"
   },
-  "keywords": ["english", "speaking", "ai", "agent", "cloudflare", "worker"],
+  "keywords": [
+    "english",
+    "speaking",
+    "ai",
+    "agent",
+    "cloudflare",
+    "worker"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@ai-sdk/openai": "^2.0.64",
     "@mastra/core": "^0.24.0",
     "hono": "^4.10.4",
     "openai": "^6.8.1",

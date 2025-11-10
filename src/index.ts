@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { evaluateSpokenEnglish, generateRandomScenario } from './agent/evaluation-agent';
-import { transcribeAudio } from './utils/openai';
 import { Scenario } from './agent/schemas';
+import { runTranscribeTool } from './agent/tools';
 
 // Cloudflare Worker 环境变量类型
 type Bindings = {
@@ -87,7 +87,11 @@ app.post('/api/evaluate', async (c) => {
 
     // Step 1: 转录音频
     console.log('Transcribing audio...');
-    const transcription = await transcribeAudio(apiKey, audioFile, 'en');
+    const transcription = await runTranscribeTool({
+      audioFile,
+      language: 'en',
+      apiKey
+    });
     console.log('Transcription:', transcription.text);
 
     // Step 2: 评估转录文本
@@ -125,7 +129,11 @@ app.post('/api/transcribe', async (c) => {
       return c.json({ error: 'No audio file provided' }, 400);
     }
 
-    const transcription = await transcribeAudio(apiKey, audioEntry, 'en');
+    const transcription = await runTranscribeTool({
+      audioFile: audioEntry,
+      language: 'en',
+      apiKey
+    });
     return c.json(transcription);
   } catch (error) {
     console.error('Transcription error:', error);
