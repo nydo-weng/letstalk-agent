@@ -1,7 +1,11 @@
 name = "english-speaking-agent"
 main = "src/index.ts"
 compatibility_date = "2024-01-01"
-node_compat = true
+compatibility_flags = ["nodejs_compat"]
+
+# 开发服务器配置
+[dev]
+port = 8787
 
 # Worker 配置
 [env.production]

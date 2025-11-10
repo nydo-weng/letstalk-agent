@@ -9,7 +9,13 @@ type Bindings = {
   OPENAI_API_KEY: string;
 };
 
+type FormDataEntryValue = string | File;
+
 const app = new Hono<{ Bindings: Bindings }>();
+
+const isFileEntry = (value: FormDataEntryValue | null): value is File => {
+  return typeof value === 'object' && value !== null && 'arrayBuffer' in (value as any) && 'name' in (value as any);
+};
 
 // CORS 配置
 app.use('/*', cors({
@@ -58,16 +64,19 @@ app.post('/api/evaluate', async (c) => {
 
     // 解析 form data
     const formData = await c.req.formData();
-    const audioFile = formData.get('audio') as File;
-    const scenarioJson = formData.get('scenario') as string;
+    const audioEntry = formData.get('audio');
+    const scenarioEntry = formData.get('scenario');
 
-    if (!audioFile) {
+    if (!isFileEntry(audioEntry)) {
       return c.json({ error: 'No audio file provided' }, 400);
     }
 
-    if (!scenarioJson) {
+    if (typeof scenarioEntry !== 'string') {
       return c.json({ error: 'No scenario provided' }, 400);
     }
+
+    const audioFile = audioEntry;
+    const scenarioJson = scenarioEntry;
 
     let scenario: Scenario;
     try {
@@ -110,13 +119,13 @@ app.post('/api/transcribe', async (c) => {
     }
 
     const formData = await c.req.formData();
-    const audioFile = formData.get('audio') as File;
+    const audioEntry = formData.get('audio');
 
-    if (!audioFile) {
+    if (!isFileEntry(audioEntry)) {
       return c.json({ error: 'No audio file provided' }, 400);
     }
 
-    const transcription = await transcribeAudio(apiKey, audioFile, 'en');
+    const transcription = await transcribeAudio(apiKey, audioEntry, 'en');
     return c.json(transcription);
   } catch (error) {
     console.error('Transcription error:', error);

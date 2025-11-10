@@ -34,7 +34,7 @@ export const PronunciationIssueSchema = z.object({
   word: z.string().describe("The word with pronunciation issue"),
   issue: z.string().describe("What's wrong with the pronunciation"),
   suggestion: z.string().describe("How to improve"),
-  commonMistake: z.string().optional().describe("Common mistake pattern (e.g., 'th' sounds like 's')")
+  commonMistake: z.string().describe("Common mistake pattern (e.g., 'th' sounds like 's'). Use empty string if none.")
 });
 
 export type PronunciationIssue = z.infer<typeof PronunciationIssueSchema>;
@@ -43,7 +43,7 @@ export type PronunciationIssue = z.infer<typeof PronunciationIssueSchema>;
 export const RelevanceAnalysisSchema = z.object({
   isRelevant: z.boolean().describe("Whether the response fits the scenario"),
   analysis: z.string().describe("Detailed explanation of relevance"),
-  missingPoints: z.array(z.string()).optional().describe("Important points that should have been mentioned")
+  missingPoints: z.array(z.string()).describe("Important points that should have been mentioned. Use an empty array when nothing is missing.")
 });
 
 export type RelevanceAnalysis = z.infer<typeof RelevanceAnalysisSchema>;

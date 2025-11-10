@@ -31,7 +31,7 @@ Please provide a comprehensive evaluation. Your task is to:
 3. **Relevance Analysis**:
    - Does the response appropriately address the scenario?
    - Is it contextually appropriate?
-   - What important points are missing (if any)?
+   - What important points are missing (if any)? Return the \`missingPoints\` list even when it's empty (use [] when nothing is missing).
 
 4. **Fluency Analysis**:
    - Identify issues with natural flow, word choice, or phrasing
