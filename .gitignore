@@ -4,6 +4,7 @@ node_modules/
 # Build output
 dist/
 .wrangler/
+.mastra/
 
 # Environment variables
 .env
